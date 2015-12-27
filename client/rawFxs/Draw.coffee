@@ -65,13 +65,13 @@ Draw = (ctx, W, H)->
 
   draw = (type, param1, param2, param3)->
     spd = param1||spd
-    if true # newone!
+    if type == "new" # newone!
       if !pos.x2?
         pos = x1:0, y1:H/2, x2:W ,y2:H/2, px1: W/3, py1: H-22, px2: W/3*2, py2: H-22
         dir = x1:0, y1:0, x2:0 ,y2:0, px1: 1, py1: 7, px2: 2, py2: 9
 
       # draw lines
-      setColor "stroke", {r:(i&255), g:255, b:255, a:1}
+      setColor "stroke", {r:(i&255), g:((i/16)%255), b:255, a:1}
       ctx.lineWidth = 1
       ctx.beginPath()
       ctx.moveTo pos.x1, pos.y1
@@ -105,28 +105,25 @@ Draw = (ctx, W, H)->
       pos.py1+=dir.py1
       pos.px2+=dir.px2
       pos.py2+=dir.py2
+      i++
 
 
     else if type=="arc"
       if !pos.x2?
-        pos = x1:0, y1:0, x2:W ,y2:H, px1: W/3, py1: H/3, px2: W/3*2, py2: H/3*2
-        dir = x1:0, y1:0, x2:0 ,y2:0, px1: 3, py1: 1, px2: 7, py2: 2
-        setNextDir(0)
-        setNextDir(1)
+        pos = x1:0, y1:H/2, x2:W ,y2:H/2, px1: W/3, py1: H-22, px2: W/3*2, py2: H-22
+        dir = x1:0, y1:0, x2:0 ,y2:0, px1: 1, py1: 7, px2: 2, py2: 9
 
-      # check main lines for out bound
-      if pos.x1>W||pos.y1>H||pos.x1<0||pos.y1<0 then setNextDir(0, true)
-      if pos.x2>W||pos.y2>H||pos.x2<0||pos.y2<0 then setNextDir(1, true)
+      triIt = (x)-> Math.abs((x%512) - 255);
 
       # draw lines
-      setColor "stroke", {r:255, g:255, b:255, a:1}
-      ctx.lineWidth = 1
+      setColor "stroke", {r: triIt(255+i/3), g:triIt(255+i/2), b: 0, a:1}
+      ctx.lineWidth = 8
       ctx.beginPath()
       ctx.moveTo pos.x1, pos.y1
       ctx.bezierCurveTo pos.px1, pos.py1, pos.px2, pos.py2, pos.x2, pos.y2
       ctx.stroke()
 
-      # DEBUG CONTROL POINTS
+      #DEBUG CONTROL POINTS
       # setColor "stroke", {r:255, g:0, b:0, a:1}
       # ctx.lineWidth = 2
       # ctx.beginPath()
@@ -134,41 +131,12 @@ Draw = (ctx, W, H)->
       # ctx.lineTo pos.px2, pos.py2
       # ctx.stroke()
 
-      # check control point out bound
-      if pos.px1>=W||pos.py1>=H||pos.px1<=0||pos.py1<=0
-        dir.px1 = -dir.px1
-        dir.py1 = -dir.py1
-      if pos.px2>=W||pos.py2>=H||pos.px2<=0||pos.py2<=0
-        dir.px2 = -dir.px2
-        dir.py2 = -dir.py2
-
       # add positions with dir's
-      pos.x1+=dir.x1
-      pos.y1+=dir.y1
-      pos.x2+=dir.x2
-      pos.y2+=dir.y2
-      pos.px1+=dir.px1
-      pos.py1+=dir.py1
-      pos.px2+=dir.px2
-      pos.py2+=dir.py2
-
-      # speed up lines after dirChange or random reverse
-      dir.x1*=1.05
-      dir.x2*=1.05
-      dir.y1*=1.05
-      dir.y2*=1.05
-
-      # reverse direction based on random number
-      if Math.random()<(param2||.01)
-        if dir.x1>0.2||dir.y1>0.2
-          direction[0]=-direction[0]
-          dir.x1 = -dir.x1*0.5
-          dir.y1 = -dir.y1*0.5
-      if Math.random()<(param3||.01)
-        if dir.x1>0.2||dir.y1>0.2
-          direction[1]=-direction[1]
-          dir.x2 = -dir.x2*0.5
-          dir.y2 = -dir.y2*0.5
+      pos.px1 = (W/5*4) + Math.sin((i/24)%360)*(W/5)
+      pos.py1 = (H/2) - Math.sin(i/36)*(H/2)
+      pos.px2 = (W/5*1) + Math.sin(i/48)*(W/5)
+      pos.py2 = (H/2) - Math.sin(i/96)*(H/2)
+      i+= spd
 
     else if type=="spiral"
       j = 0
@@ -252,4 +220,3 @@ Draw = (ctx, W, H)->
 
 
 exports.Draw = Draw
-

@@ -1,5 +1,6 @@
 Zoom = (ctx, w, h)->
-  canvasBuffer = document.createElement("canvas")
+  Canvas = document.createElement 'canvas'
+  canvasBuffer = document.createElement 'canvas'
 
   draw = (zoom, src, trg)->
     if zoom

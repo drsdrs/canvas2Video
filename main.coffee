@@ -1,9 +1,9 @@
 'use strict'
-electron = require('electron')
+electron = require 'electron'
+browserWindow = require 'browser-window'
+#ipc = require 'ipcMain'
 app = electron.app
-BrowserWindow = electron.BrowserWindow
-mainWindow = undefined
-
+mainWindow = null
 
 # only for mac schisl
 app.on 'window-all-closed', -> if process.platform != 'darwin' then app.quit()
@@ -11,13 +11,14 @@ app.on 'window-all-closed', -> if process.platform != 'darwin' then app.quit()
 # This method will be called when Electron has finished
 # initialization and is ready to create browser windows.
 app.on 'ready', ->
-  mainWindow = new BrowserWindow(
+  mainWindow = new browserWindow
     width: 800
-    height: 600)
+    height: 800
 
-  mainWindow.loadURL 'file://' + __dirname + '/index.html'
+  mainWindow.loadURL 'file://' + __dirname + '/main.html'
   mainWindow.webContents.openDevTools()
-  mainWindow.on 'closed', -> mainWindow = null
+
+  mainWindow.on 'closed', -> canvasWindow = null
 
 
 

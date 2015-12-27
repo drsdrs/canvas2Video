@@ -1,5 +1,5 @@
 PixelPulator = (ctx, W, H)->
-  Canvas = document.createElement("canvas")
+  Canvas = document.createElement 'canvas'
 
   i = 0
   X = 0

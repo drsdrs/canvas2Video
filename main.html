@@ -3,17 +3,15 @@
   <head>
     <meta charset="UTF-8">
     <title>Hello World!</title>
-    <style media="screen">
-      canvas {
-        background: black;
-      }
-    </style>
+    <link rel="stylesheet" href="./styles.css" media="screen" title="no title" charset="utf-8">
   </head>
   <body>
     <script>
-      require('./client/pixi.js')
+      require('./client/libs/pixi.js')
+      // require('./client/libs/pixi-extra-filters.js')
       require('coffee-script').register();
       require('./client/app');
     </script>
+    <div id="app"></div>
   </body>
 </html>

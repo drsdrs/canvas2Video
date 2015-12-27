@@ -10,5 +10,6 @@ module.exports =
     if currentTime > 1
       @startTime = (new Date).getTime()
       @frameNumber = 0
+    @fpsAvg = Math.round ((@fpsAvg||result)+result)/2
     @fps = result
     result

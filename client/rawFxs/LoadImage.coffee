@@ -1,7 +1,6 @@
 fs = require 'fs'
-image = document.createElement "canvas"
 
-imgPath = __dirname+'/../imgs/'
+imgPath = __dirname+'/../../imgs/'
 images = []
 
 fs.readdir imgPath, (err, res)->
@@ -10,14 +9,19 @@ fs.readdir imgPath, (err, res)->
 
 
 LoadImage = (ctx, w, h)->
+  Image = document.createElement 'img'
+
 
   getRndImg = ()-> images[ Math.floor Math.random()*images.length ]
 
   load = (ix, iy, iw, ih)->
+
     filepath = imgPath+getRndImg()
+    console.log filepath
+
     fs.readFile filepath, (err, imgData)->
       if err then throw err
-      img = image
+      img = new Image
       img.src = imgData
 
       imgRatio = img.width/img.height

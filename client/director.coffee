@@ -10,6 +10,15 @@ module.exports =
     @screenplay = screenplay
     @assignPage()
     @pageState = 1
+
+  stop: ->
+    @frameState = 0
+    @pageState = 0
+    @screenplay.forEach (page)->
+      page.looped = undefined
+      page.init()
+    @assignPage()
+
   direct: ->
     if @checkPage()
       @drawPage()
@@ -22,11 +31,12 @@ module.exports =
         if @currentPage.loop
           @pageState = 0
           @frameState = 0
-          @screenplay.forEach (page, i)-> page.looped = undefined
+          @screenplay.forEach (page)-> page.looped = undefined
         else return false
       @assignPage()
       @pageState++
     true
+
   drawPage: ->
     if @currentPage.loop then @currentPage.draw()
     else if !@currentPage.looped?
@@ -34,7 +44,8 @@ module.exports =
       @currentPage.draw()
     @frameState++
   assignPage: ->
+    console.log @screenplay
     @currentPage = @screenplay[@pageState]
     @nextPage = @screenplay[(@pageState+1)%@screenplay.length]
-    @currentPage.draw = @currentPage.init()
+    if !@currentPage.draw? then @currentPage.draw = @currentPage.init()
     #console.log "change task "+@pageState#, @currentPage, @nextPage
