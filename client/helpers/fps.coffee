@@ -2,7 +2,7 @@ module.exports =
   startTime: 0
   frameNumber: 0
   fps: 0
-  getFPS: ->
+  getFps: ->
     @frameNumber++
     d = (new Date).getTime()
     currentTime = (d - (@startTime)) / 1000

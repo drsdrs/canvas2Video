@@ -1,9 +1,7 @@
 'use strict'
 electron = require 'electron'
 browserWindow = require 'browser-window'
-#ipc = require 'ipcMain'
 app = electron.app
-mainWindow = null
 
 # only for mac schisl
 app.on 'window-all-closed', -> if process.platform != 'darwin' then app.quit()

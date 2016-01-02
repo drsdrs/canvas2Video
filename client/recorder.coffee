@@ -1,12 +1,13 @@
 spawn = require('child_process').spawn
-measure = require('./MeasureTime')()
-
+config = require '../config'
 
 recorder =
   avconv: null
   recording: false
   canvas: null
-  init: (canvas, fps)-> @canvas = canvas
+  init: (canvas, fps)->
+    @canvas = canvas
+    @fps = fps
 
   putFrame: (uri, cb)->
     return cb() if !@recording
@@ -25,21 +26,21 @@ recorder =
     that = @
     deleteMovie = spawn 'rm', ['./movie.mp4']
     @avconv = spawn 'avconv', [
-      #'-f', 'pulse', '-ac', '2', '-i', 'default'
+      '-i', config.audioFile
       #'-c:a', 'mp3'
       #'-c:v', 'libx264'
       #'-y' # overwrite existing file
-      '-an' # disable audio channel
+      #'-an' # disable audio channel
       '-f', 'image2pipe'
-      '-r', 24 #, frames per second
-      '-pix_fmt', 'yuv420p' #for compatibility with outdated media players.
+      '-r', @fps #, frames per second
+      #'-pix_fmt', 'yuv420p' #for compatibility with outdated media players.
       '-i'
       '-'
       './movie.mp4'
     ]
     @avconv.stderr.on 'data', (data)->
       data = data.toString()
-      #console.log data
+      console.log data
       if data.includes('frame= ')
         frames = data.split('frame= ')[1].trim().split(' ')[0]
         console.log 'progress: ' + frames + 'frames'

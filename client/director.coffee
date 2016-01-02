@@ -1,10 +1,11 @@
+config = require '../config'
+
 module.exports =
   pageState: 0
   frameState: 0
   currentPage: null
   nextPage: null
   screenplay: null
-  fps: 24
   init: (screenplay, fps)->
     if fps then @fps = fps
     @screenplay = screenplay
@@ -43,8 +44,8 @@ module.exports =
       @currentPage.looped = true
       @currentPage.draw()
     @frameState++
+    config.frameState = @frameState
   assignPage: ->
-    console.log @screenplay
     @currentPage = @screenplay[@pageState]
     @nextPage = @screenplay[(@pageState+1)%@screenplay.length]
     if !@currentPage.draw? then @currentPage.draw = @currentPage.init()

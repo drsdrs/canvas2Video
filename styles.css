@@ -1,7 +1,14 @@
-body, html, #app { margin:0; padding:0; height:100%; width:100%; overflow: hidden;}
+body, html, #app {
+  margin:0;
+  padding:0;
+  height:100%;
+  width:100%;
+  /*overflow: hidden;*/
+}
 
 .pull-left { float: left; }
 .pull-right { float: right; }
+.hidden { display: none }
 
 #app {
   text-align: center;

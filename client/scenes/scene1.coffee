@@ -1,5 +1,5 @@
-module.exports = (stage, W, H)->
-
+module.exports = (stage, W, H, FPS, cb)->
+  cb()
   init:->
     graph = new PIXI.Graphics
     graph.position.x = 620 / 2
