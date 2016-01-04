@@ -33,7 +33,7 @@ recorder =
       #'-an' # disable audio channel
       '-f', 'image2pipe'
       '-r', @fps #, frames per second
-      '-c:v', 'rawvideo'
+      #'-c:v', 'rawvideo'
       #'-pix_fmt', 'yuv420p' #for compatibility with outdated media players.
       '-i'
       '-'
