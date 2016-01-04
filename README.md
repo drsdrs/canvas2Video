@@ -18,7 +18,7 @@ Clone project && cd into<br>
 npm i
 ```
 
-<h3> How to use <h3>
+<h3> How to use </h3>
 
 Simply modify /client/screenplay.coffee, <br>
 and use/modify scripts saved in /client/scenes
