@@ -1,4 +1,5 @@
 <h2>Canvas2Video</h2>
+<i>Tested on Ubuntu 15.04<i>
 
 Uses a HTML-Canvas to draw on.<br>
 Added Pixi.js for graphics, and Seriously for video-fx.<br>
