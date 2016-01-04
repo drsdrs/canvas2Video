@@ -1,11 +1,12 @@
 <h2>Canvas2Video</h2>
-<i><small>Tested on Ubuntu 15.04</small></i>
+<small><i>Tested on Ubuntu 15.04</i></small>
 
 Uses a HTML-Canvas to draw on.<br>
 Added Pixi.js for graphics, and Seriously for video-fx.<br>
 
-This is an electron app.
-Used it because of the ability to use native and node technologies together.
+This is an electron app.<br>
+I use eleectron because of the ability to combine HTML and nodejs technologies.<br>
+To save the workload of streaming to a browser window.<br>
 
 <h3>install requirements</h3>
 avconv - located in libav package
