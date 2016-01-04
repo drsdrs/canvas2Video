@@ -24,19 +24,20 @@ recorder =
     if @recording then return console.log "Rec. in progress"
     else @recording = true
     that = @
-    deleteMovie = spawn 'rm', ['./movie.mp4']
     @avconv = spawn 'avconv', [
+      '-r', @fps #, frames per second
       '-i', config.audioFile
       #'-c:a', 'mp3'
       #'-c:v', 'libx264'
-      #'-y' # overwrite existing file
+      '-y' # overwrite existing file
       #'-an' # disable audio channel
       '-f', 'image2pipe'
       '-r', @fps #, frames per second
+      '-c:v', 'rawvideo'
       #'-pix_fmt', 'yuv420p' #for compatibility with outdated media players.
       '-i'
       '-'
-      './movie.mp4'
+      './movie.mov'
     ]
     @avconv.stderr.on 'data', (data)->
       data = data.toString()

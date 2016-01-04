@@ -1,4 +1,4 @@
-{ FPS, W, H } = require '../config'
+{ FPS, W, H, BPM } = require '../config'
 scenes = null
 
 module.exports = (stage, cb)->
@@ -10,21 +10,21 @@ screenplay = (scenes)->
     time: 0, loop: true
     init: ->
       do1 = scenes.get("audioAnalysis")()
-      do2 = scenes.get('beatTrigger')(173)
+      do2 = scenes.get('beatTrigger')(BPM)
       draw = ->
         do1()
         do2()
   }, {
-    time: 30, loop: true
+    time: 3.60, loop: true
     init: scenes.get "walkingKiwi"
   }, {
-    time: 32, loop: true
+    time: 3.61, loop: true
     init: ->
       i = 0
       tunnel = scenes.get("tunnel")()
       play = -> tunnel Math.cos(i/80)*20, 1+Math.sin(++i/65)*20, 32, i*i>>8
   }, {
-    time: 40, end: true, loop: false
+    time: 3.62, end: true, loop: false
     init: ->
       console.log "EndInit  4"
       draw = -> console.log "Enddraw  4"

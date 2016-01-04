@@ -17,7 +17,7 @@ module.exports = (stage, W, H, FPS, cb)->
       beat = frame/FPS*bps
       bc = 255^((((beat/16)%1)*(255))&255)
       bb = [ (bc>>7)&1, (bc>>6)&1, (bc>>5)&1, (bc>>4)&1, (bc>>3)&1, (bc>>2)&1, (bc>>1)&1, (bc>>0)&1 ]
-      text.text = beat>>0
+      text.text = beat/4
       #console.log bb
       if bb[3] # 1
         #graph.fillStyle 0xff0000

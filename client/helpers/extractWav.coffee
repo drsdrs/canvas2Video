@@ -1,4 +1,4 @@
-# copied from https://gist.github.com/jhurliman/1953894
+# some content from https://gist.github.com/jhurliman/1953894
 
 { spawn } = require 'child_process'
 config = require '../../config'
@@ -6,32 +6,60 @@ config = require '../../config'
 async = require 'async'
 fft = require('fft-js').fft
 fftUtil = require('fft-js').util
+fs = require 'fs'
+jsonpack = require 'jsonpack'
+caching = false
 
-getFft = (signal)->
-  signal = signal.slice 0, 512
-  #signal = Array.prototype.slice.call(signal)
-  phasors = fft(signal)
-  frequencies = fftUtil.fftFreq(phasors, 8000)
-  magnitudes = fftUtil.fftMag(phasors)
-  frequencies.map (f, ix) ->
-      frequency: f
-      magnitude: magnitudes[ix]
-
+checkIfCached = ()-> fs.existsSync(config.audioFile+'.dat') && caching
 
 
 init = (cb)->
-  data = [ [], [] ]
-  saveSample = (smpl, ch)-> data[ch].push smpl
+  if checkIfCached()
+    res = JSON.parse fs.readFileSync config.audioFile+'.dat'
+    return cb res
+
+  chData = [ [], [] ]
+  saveSample = (smpl, ch)-> chData[ch].push smpl
   readWavFinish = (err, res)->
     if err then throw err# else console.log res
     newData = []
-    data.forEach (arrData, i)->
-      newData[i] = toFrames new Float32Array arrData
+    functs = []
+    processChannels = (arrData, channel)->
+      assign = (res, channel)-> newData[channel] = res
+      toFrames (new Float32Array arrData), assign, channel
+
+    chData.forEach (data, ch)-> processChannels data, ch
+    measure(' start audioProcessing ')
+    #saveJsonObject newData
     cb newData
+    measure(' end async audioProcess')
+
 
   getWav saveSample, readWavFinish
 
 module.exports = init
+
+saveJsonObject = (obj)->
+  json = jsonpack.JSON.stringify obj
+  packedData = jsonpack.pack(json)
+  fs.writeFile config.audioFile+'.dat', json
+  fs.writeFile config.audioFile+'.dat.txt', packedData
+
+
+findNextPow2 = (nr)->
+  pow = 1
+  while nr>Math.pow(2, pow) then pow++
+  Math.pow 2, pow-1
+
+getFft = (signal)->
+  signal = signal.slice 0, findNextPow2 signal.length
+  #signal = Array.prototype.slice.call(signal)
+  phasors = fft(signal)
+  frequencies = fftUtil.fftFreq(phasors, 44100)
+  magnitudes = fftUtil.fftMag(phasors)
+  res = frequencies.map (f, ix) ->
+    frequency: f
+    magnitude: magnitudes[ix]
 
 merge = (data)->
   res = 0
@@ -40,12 +68,14 @@ merge = (data)->
   while i<len then res += data[i++]
   res/len
 
-toFrames = (data)->
+toFrames = (data, assign, channel, cb)->
+  #console.log 'convert channel'+channel
   waveFrames = []
   waveFramePos = 0
   samplesPerFrame = 44100/config.FPS
   samplesPerFrame = samplesPerFrame-(samplesPerFrame%2)
   samplesToThrowAway = Math.round samplesPerFrame%2
+  console.log samplesPerFrame%2
   samplePos = 0
   functs = []
   while samplePos<data.length
@@ -53,10 +83,10 @@ toFrames = (data)->
     waveFrames[waveFramePos] =
       data: frameData
       merged: merge frameData
-      fft: getFft frameData
+      #fft: getFft frameData
     waveFramePos++
     samplePos += samplesPerFrame+samplesToThrowAway
-  waveFrames
+  assign waveFrames, channel, cb
 
 getWav = (sampleCallback, endCallback)->
   outputStr = ''

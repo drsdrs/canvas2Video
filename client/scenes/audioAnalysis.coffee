@@ -17,13 +17,26 @@ module.exports = (stage, W, H, FPS, cb)->
     stage.addChild graph
 
     draw = ->
-      frameState = config.frameState+8
-      return if !waveFrames[0][frameState]?
-      wavdata = waveFrames[0][frameState].data
-      i = wavdata.length-1
-      sizeX = W/i
-      graph.clear()
-      while i--
-        v = wavdata[i]
-        graph.lineStyle 5, 0xff00ff, 1
-        graph.drawRect i*sizeX, 0, sizeX, H*v
+      drawFft = ->
+        frameState = config.frameState
+        return if !waveFrames[0][frameState]?
+        fftdata = waveFrames[0][frameState].fft.slice 0, 128
+        i = fftdata.length-1
+        sizeX = W/i
+        graph.clear()
+        while i--
+          v = fftdata[i].magnitude
+          graph.lineStyle 5, 0xff00ff, 1
+          graph.drawRect i*sizeX, 0, sizeX, v*2
+      drawWaveform = ->
+        frameState = config.frameState+8
+        return if !waveFrames[0][frameState]?
+        wavdata = waveFrames[0][frameState].data
+        i = wavdata.length-1
+        sizeX = W/i
+        graph.clear()
+        while i--
+          v = wavdata[i]
+          graph.lineStyle 5, 0xff00ff, 1
+          graph.drawRect i*sizeX, 0, sizeX, H*v
+      drawWaveform()
