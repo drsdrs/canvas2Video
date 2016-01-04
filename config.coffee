@@ -1,5 +1,5 @@
 module.exports =
-  audioFile: __dirname+'/testMusic2.wav'
+  audioFile: __dirname+'/s32.wav'
   frameState: 0
   BPM: 60
   FPS: 25

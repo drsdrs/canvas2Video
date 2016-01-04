@@ -33,7 +33,6 @@ render = ->
 
 window.onload = ->
   console.log 'App started, loading data...'
-  measure()
   require('./screenplay')(stage, startApp)
 
 startApp = (screenplay)->
@@ -45,6 +44,6 @@ startApp = (screenplay)->
   director.init screenplay, FPS
   recorder.init renderer.view, FPS
   #if confirm("Record ?") then recorder.start()
-  recorder.start()
+  #recorder.start()
   measure 'done loading in'
   window.requestAnimationFrame draw

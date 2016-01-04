@@ -25,7 +25,7 @@ recorder =
     else @recording = true
     that = @
     @avconv = spawn 'avconv', [
-      '-r', @fps #, frames per second
+      #'-r', @fps #, frames per second
       '-i', config.audioFile
       #'-c:a', 'mp3'
       #'-c:v', 'libx264'
@@ -37,7 +37,7 @@ recorder =
       #'-pix_fmt', 'yuv420p' #for compatibility with outdated media players.
       '-i'
       '-'
-      './movie.mov'
+      './movie.mp4'
     ]
     @avconv.stderr.on 'data', (data)->
       data = data.toString()

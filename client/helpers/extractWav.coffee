@@ -26,7 +26,7 @@ init = (cb)->
     functs = []
     processChannels = (arrData, channel)->
       assign = (res, channel)-> newData[channel] = res
-      toFrames (new Float32Array arrData), assign, channel
+      toFrames (new Uint8Array arrData), assign, channel
 
     chData.forEach (data, ch)-> processChannels data, ch
     measure(' start audioProcessing ')
@@ -35,7 +35,7 @@ init = (cb)->
     measure(' end async audioProcess')
 
 
-  getWav saveSample, readWavFinish
+  getWav false, saveSample, readWavFinish
 
 module.exports = init
 
@@ -88,7 +88,7 @@ toFrames = (data, assign, channel, cb)->
     samplePos += samplesPerFrame+samplesToThrowAway
   assign waveFrames, channel, cb
 
-getWav = (sampleCallback, endCallback)->
+getWav = (toFloat, sampleCallback, endCallback)->
   outputStr = ''
   oddByte = null
   channel = 0
@@ -96,32 +96,39 @@ getWav = (sampleCallback, endCallback)->
   # Extract signed 16-bit little endian PCM data with ffmpeg and pipe to STDOUT
   ffmpeg = spawn 'ffmpeg', [
     '-i', config.audioFile
-    '-f', 's16le'
+    '-f', if toFloat then 's16le' else 'u8'
     '-ac', '2'
-    '-acodec', 'pcm_s16le'
+    '-acodec', if toFloat then 'pcm_s16le' else 'pcm_u8'
     '-ar', '44100'
     '-y', 'pipe:1'
   ]
 
   ffmpeg.stdout.on 'data', (data) ->
-    gotData = true
-    i = 0
-    samples = Math.floor((data.length + (if oddByte != null then 1 else 0)) / 2)
-    # If there is a leftover byte from the previous block, combine it with the
-    # first byte from this block
-    if oddByte != null
-      value = (data.readInt8(i++) << 8 | oddByte) / 32767
-      sampleCallback value, channel
-      channel = ++channel % 2
-    while i < data.length
-      value = data.readInt16LE(i) / 32767
-      sampleCallback value, channel
-      channel = ++channel % 2
-      i += 2
-    oddByte = if i < data.length then data.readUInt8(i) else null
+    if toFloat
+      gotData = true
+      i = 0
+      samples = Math.floor((data.length + (if oddByte != null then 1 else 0)) / 2)
+      # If there is a leftover byte from the previous block, combine it with the
+      # first byte from this block
+      if oddByte != null
+        value = (data.readInt8(i++) << 8 | oddByte) / 32767
+        sampleCallback value, channel
+        channel = ++channel % 2
+      while i < data.length
+        value = data.readInt16LE(i) / 32767
+        sampleCallback value, channel
+        channel = ++channel % 2
+        i += 2
+      oddByte = if i < data.length then data.readUInt8(i) else null
+    else # to byte
+      gotData = true
+      i = 0
+      while i < data.length
+        sampleCallback data[i], channel
+        channel = ++channel % 2
+        i++
 
   ffmpeg.stderr.on 'data', (data) ->
-    # Text info from ffmpeg is output to stderr
     outputStr += data.toString()
 
   ffmpeg.stderr.on 'end', ->
