@@ -36,6 +36,7 @@
     "fft-js": "0.0.9",
     "jsonpack": "^1.1.4",
     "pcm-format": "^1.1.2",
+    "typedarray-to-buffer": "^3.0.4",
     "wav": "^1.0.0"
   }
 }
