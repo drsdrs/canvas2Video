@@ -25,6 +25,7 @@ module.exports =
       @drawPage()
       true
     else false
+
   checkPage: ->
     if @nextPage.time*@fps<=@frameState
       @frameState++
@@ -45,6 +46,7 @@ module.exports =
       @currentPage.draw()
     @frameState++
     config.frameState = @frameState
+
   assignPage: ->
     @currentPage = @screenplay[@pageState]
     @nextPage = @screenplay[(@pageState+1)%@screenplay.length]

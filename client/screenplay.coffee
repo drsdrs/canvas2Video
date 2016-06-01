@@ -9,25 +9,42 @@ screenplay = (scenes)->
   [{
     time: 0, loop: true
     init: ->
-      i=0
-      #tunnel = scenes.get("tunnel")()
+      i = 0
       do1 = scenes.get("audioAnalysis")()
-      #do2 = scenes.get('beatTrigger')(BPM)
+      do2 = scenes.get('beatTrigger')(BPM)
       draw = ->
         #tunnel Math.cos(i/80)*20, 1+Math.sin(++i/65)*20, 32, i*i>>8
         do1()
-        #do2()
+        do2()
   }, {
-    time: 18, loop: true
+    time: 0, loop: true
     init: scenes.get "walkingKiwi"
   }, {
-    time: 21, loop: true
+    time: 0, loop: true
     init: ->
       i = 0
       tunnel = scenes.get("tunnel")()
-      play = -> tunnel Math.cos(i/80)*20, 1+Math.sin(++i/65)*20, 32, i*i>>8
+      play = ->
+        do1()
+        #do2()
+        tunnel Math.cos(i/80)*20, 1+Math.sin(++i/65)*20, 32, i*i>>8
   }, {
-    time: 26, end: true, loop: false
+    time: 3, loop: true
+    init: scenes.get "scene1"
+  }, {
+    time: 20, loop: true
+    init: scenes.get "walkingKiwi"
+  }, {
+    time: 40, loop: true
+    init: ->
+      i = 0
+      #tunnel = scenes.get("tunnel")()
+      play = ->
+        do1()
+        #do2()
+        #tunnel Math.cos(i/80)*20, 1+Math.sin(++i/65)*20, 32, i*i>>8
+  }, {
+    time: 45, end: true, loop: false
     init: ->
       draw = -> console.log "End SCENE"
   }]

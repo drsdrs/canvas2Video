@@ -1,8 +1,10 @@
 module.exports =
-  audioFile: __dirname+'/testMusic.wav'
+  audioFile: 'videoIntro.wav'
   caching: true
+  RECORDING: true
+  PREVIEW: true
   frameState: 0
-  BPM: 60
-  FPS: 25
-  W: 800
-  H: 600
+  BPM: 140
+  FPS: 60
+  W: 1920
+  H: 1080

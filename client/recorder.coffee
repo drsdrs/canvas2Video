@@ -24,7 +24,7 @@ recorder =
     if @recording then return console.log "Rec. in progress"
     else @recording = true
     that = @
-    @avconv = spawn 'avconv', [
+    @avconv = spawn 'ffmpeg', [
       #'-r', @fps #, frames per second
       '-i', config.audioFile
       #'-c:a', 'mp3'
@@ -49,7 +49,7 @@ recorder =
     @avconv.on 'close', (code)->
       if code != 0 then throw 'avconv doesnt did well...'+code
       if that.recording
-        watchMovie = spawn 'totem', ['./movie.mp4']
+        if config.PREVIEW then spawn 'vlc', ['./movie.mp4']
         that.recording = false
         console.log 'avconv done !'
 

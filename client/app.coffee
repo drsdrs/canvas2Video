@@ -1,4 +1,4 @@
-{ FPS, W, H } = require '../config'
+{ FPS, W, H, RECORDING } = require '../config'
 renderer = PIXI.autoDetectRenderer W, H, antialias: true, true
 stage = new PIXI.Container
 fps =  require './helpers/fps'
@@ -44,6 +44,6 @@ startApp = (screenplay)->
   director.init screenplay, FPS
   recorder.init renderer.view, FPS
   #if confirm("Record ?") then recorder.start()
-  #recorder.start()
+  if RECORDING then recorder.start()
   measure 'done loading in'
   window.requestAnimationFrame draw

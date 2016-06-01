@@ -1,6 +1,6 @@
 effectPath = __dirname+'/../libs/Seriously/effects/'
 
-Seriously =  require 'seriously'
+Seriously =  require __dirname+'/../libs/Seriously/seriously.js'
 effects = require(__dirname+'/../helpers/requireAll') effectPath
 
 module.exports = (stage, W, H, FPS, cb)->

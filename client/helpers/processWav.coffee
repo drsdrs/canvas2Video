@@ -59,7 +59,7 @@ init = ->
 
 
   ffmpeg.stderr.on 'data', (data) ->
-    null#console.log 'ffmpeg ERR '+data
+    console.log 'ffmpeg ERR '+data
 
   ffmpeg.stderr.on 'end', (data)->
     writeStreamCh0.end()
