@@ -1,3 +1,4 @@
+PNG = require('node-png').PNG
 spawn = require('child_process').spawn
 config = require '../config'
 
@@ -11,8 +12,9 @@ recorder =
 
   putFrame: (uri, cb)->
     return cb() if !@recording
-    raw = uri.split(",")[1]
-    buffer = new Buffer raw, 'base64'
+    #raw = uri.split(",")[1]
+    buffer = new Buffer uri#raw#, 'base64'
+    png = new PNG buffer, config.W, config.H
     @avconv.stdin.write buffer
     cb() if cb?
 
@@ -24,9 +26,8 @@ recorder =
     if @recording then return console.log "Rec. in progress"
     else @recording = true
     that = @
-    @avconv = spawn 'ffmpeg', [
+    avconvArgs = [
       #'-r', @fps #, frames per second
-      '-i', config.audioFile
       #'-c:a', 'mp3'
       #'-c:v', 'libx264'
       '-y' # overwrite existing file
@@ -39,6 +40,13 @@ recorder =
       '-'
       './movie.mp4'
     ]
+    if config.audioFile!=false
+      avconvArgs.unshift '-i', config.audioFile
+    else
+      avconvArgs.unshift '-an'
+
+    console.log avconvArgs
+    @avconv = spawn 'ffmpeg', avconvArgs
     @avconv.stderr.on 'data', (data)->
       data = data.toString()
       console.log data

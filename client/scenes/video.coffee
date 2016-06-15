@@ -1,14 +1,12 @@
 effectPath = __dirname+'/../libs/Seriously/effects/'
-
-Seriously =  require __dirname+'/../libs/Seriously/seriously.js'
 effects = require(__dirname+'/../helpers/requireAll') effectPath
+{W, H, FPS, frameState} = require '../../config'
 
-module.exports = (stage, W, H, FPS, cb)->
+module.exports = (stage, renderer, cb)->
   cb()
   init: ->
     seriously = new Seriously()
-    videourl = './vids/small.mp4'
-    videourl = './vids/smpl_360x240.mp4'
+    videourl = __dirname+'/assets/testvid.mp4'
     canvasEl = document.createElement 'canvas'
     textureCanvas = new PIXI.Texture.fromCanvas(canvasEl, 1)
 
@@ -21,8 +19,8 @@ module.exports = (stage, W, H, FPS, cb)->
     videoEl = document.createElement 'video'
     videoEl.src = videourl
     videoEl.loop = "looped"
-    videoEl.mute = "muted"
-    console.log x:videoEl
+    videoEl.muted = true
+    console.log x:videoEl, effects
 
     videoEl.oncanplay = ()->
       canvasSprite.width = videoEl.videoHeight

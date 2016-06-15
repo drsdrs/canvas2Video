@@ -25,7 +25,7 @@ PixelPulator = (ctx, W, H)->
           else data[j]
       ctx.putImageData(imageData, 0, 0)
 
-    WW = ->
+    modern = ->
       x = 0
       while x<W
         y = 0
@@ -39,7 +39,7 @@ PixelPulator = (ctx, W, H)->
         x++
       ctx.putImageData imageData, 0, 0
 
-    YY = ->
+    modern2 = ->
       x = 0
       while x<W
         y = 0
@@ -119,10 +119,11 @@ PixelPulator = (ctx, W, H)->
     if type=="fadeout" then fadeout()
     else if type=="blackout" then blackout()
     else if type=="whitein" then whitein()
-    else if type=="tri" then tri()
     else if type=="clear" then clear()
     else if type=="colorShift" then colorShift()
-    else if type=="w" then XX()
+    else if type=="modern" then modern()
+    else if type=="XX" then XX()
+    else if type=="modern2" then modern2()
     else if type=="colorize"
       x = 0
       while x<W

@@ -4,7 +4,7 @@ getWaveFrames = require '../helpers/checkCachedAudioFile'
 ah = require '../helpers/arrayHelpers'
 waveFrames = []
 
-module.exports = (stage, W, H, FPS, cb)->
+module.exports = (stage, renderer, cb)->
   getWaveFrames (frames)->
     console.log "WaveLoaded", frames
     waveFrames = frames

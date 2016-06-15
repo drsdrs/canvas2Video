@@ -1,9 +1,10 @@
-config = require '../../config'
+{W, H, FPS, BPM} = require '../../config'
+conf = require '../../config'
 
-module.exports = (stage, W, H, FPS, cb)->
+module.exports = (stage, renderer, cb)->
   cb()
   init: ()->
-    bps = config.BPM/60
+    bps = BPM/60
     graph = new PIXI.Graphics
     text = new PIXI.Text 'This is a pixi text', font : '48px Arial', fill : 0x88aaee, align : 'left', stroke: 0x444444
     text.position =  x: 5, y:5
@@ -16,7 +17,7 @@ module.exports = (stage, W, H, FPS, cb)->
 
     draw = ()->
       graph.clear()
-      beat = config.frameState/FPS*bps
+      beat = conf.frameState/FPS*bps
       bc = 255^((((beat/16)%1)*(255))&255)
       bb = [ (bc>>7)&1, (bc>>6)&1, (bc>>5)&1, (bc>>4)&1, (bc>>3)&1, (bc>>2)&1, (bc>>1)&1, (bc>>0)&1 ]
       text.text = Math.floor(beat/4)+':'+Math.floor(((beat/4)%1)*10/2.5).toFixed(0)

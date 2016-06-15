@@ -1,4 +1,6 @@
-module.exports = (stage, W, H, FPS, cb)->
+{W, H, FPS, frameState} = require '../../config'
+
+module.exports = (stage, renderer, cb)->
   cb()
   init: ->
     graph = new PIXI.Graphics
@@ -19,8 +21,8 @@ module.exports = (stage, W, H, FPS, cb)->
       while step<steps
         rx = ((W/2-endSize/2)-((stepSizeX-(spdX*(steps-step-1)/steps))*step/2))
         ry = ((H/2-endSize/2)-((stepSizeY-(spdY*(steps-step-1)/steps))*step/2))
-        rw = (endSize+stepSizeX*step)
-        rh = (endSize+stepSizeY*step)
-        graph.lineStyle 3, 0x88aaee, 1
+        rw = endSize+stepSizeX*step
+        rh = endSize+stepSizeY*step
+        graph.lineStyle 2, 0x88aaee, 1
         graph.drawRect rx, ry, rw, rh
         step++

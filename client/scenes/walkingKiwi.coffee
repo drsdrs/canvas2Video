@@ -1,7 +1,9 @@
-module.exports = (stage, W, H, FPS, cb)->
+{W, H, FPS, frameState} = require '../../config'
+
+module.exports = (stage, renderer, cb)->
   cb()
   init: ->
-    i=0
+    i = 0
     partContainer = new PIXI.Container
     headContainer = new PIXI.Container
     headContainer.startRotation = 0
@@ -11,6 +13,12 @@ module.exports = (stage, W, H, FPS, cb)->
     partContainer.position = x: -150, y: H-250
     partContainer.scale = x:.4, y: .4
     partContainer.reverse = 0
+
+    filter = new PIXI.filters.BlurFilter()
+    filter.blur = 32
+    filter.passes = 11
+
+    stage.filters = [filter]
 
     stage.addChild partContainer
 

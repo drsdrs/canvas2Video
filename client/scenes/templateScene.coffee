@@ -1,4 +1,6 @@
-module.exports = (stage, W, H, FPS, cb)->
+{W, H, FPS, frameState} = require '../../config'
+
+module.exports = (stage, renderer, cb)->
   cb()
   init: ->
     graph = new PIXI.Graphics

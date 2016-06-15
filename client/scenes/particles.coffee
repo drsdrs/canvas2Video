@@ -1,4 +1,6 @@
-module.exports = (stage, W, H, FPS, cb)->
+{W, H, FPS, frameState} = require '../../config'
+
+module.exports = (stage, renderer, cb)->
   fs = require 'fs'
   ls = fs.readdirSync(__dirname+'/emitters')
   emitters = {}
@@ -12,24 +14,26 @@ module.exports = (stage, W, H, FPS, cb)->
     container.position = x: W/2, y: H/2
     stage.addChild container
     defaultParticles =
-      'alpha': 'start': 1, 'end': 1
-      'scale': 'start': 1, 'end': 0
-      'color': 'start': 'ff00ff', 'end': '0fffff'
-      'speed': 'start': 1, 'end': 140
+      'alpha': 'start': 0, 'end': 1
+      'scale': 'start': 0.1, 'end': 0.3
+      'color': 'start': '000000', 'end': 'ffffff'
+      'speed': 'start': 1, 'end': 250
       'startRotation': 'min': 0, 'max': 360
       'rotationSpeed': 'min': 2, 'max': -8
-      'lifetime': 'min': 0, 'max': 12
+      'lifetime': 'min': 8, 'max': 12
       'frequency': 0.0125
-      'emitterLifetime': 162.8
-      'maxParticles': 120
+      'emitterLifetime': 64
+      'maxParticles': 8000
       'pos': 'x': W/2, 'y': H/2
       'addAtBack': true
       'spawnType': 'circle'
-      'spawnCircle': 'x': 50, 'y': 50, 'r': 50
+      'spawnCircle': 'x': 0, 'y': 0, 'r': 1
 
     particleImages = [ PIXI.Texture.fromImage __dirname+'/assets/particle.png' ]
 
-    emitter = new cloudkid.Emitter stage, particleImages, emitters.special
+
+    emitter = new cloudkid.Emitter stage, particleImages, defaultParticles
+    console.log emitter
 
     elapsed = Date.now()
     emitter.emit = true;

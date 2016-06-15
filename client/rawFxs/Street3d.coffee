@@ -73,7 +73,7 @@ Street = (ctx, W, H)->
       #console.log alpha
       #street.push appendStreet(endZ-1)
 
-      streetZSpd += 0.00000125
+      streetZSpd += 0.0000001
       streetZ += streetZSpd
       if streetZ>=1
         streetZ = 0

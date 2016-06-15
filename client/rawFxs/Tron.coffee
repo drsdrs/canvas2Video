@@ -104,10 +104,10 @@ Tron = (ctx, W, H)->
             dir = x: -dir.y, y: -dir.x, z:0
           else if (pos.x-stepSizeX)>-W/2&&(pos.x+stepSizeX)<W/2
             dir = x: 0, y: -stepSizeY, z:0
-            console.log "UD"
+            #console.log "UD"
           else if (pos.y-stepSizeY)>-H/2&&(pos.y+stepSizeY)<H/2
             dir = x: -stepSizeX, y: 0, z:0
-            console.log "LR"
+            #console.log "LR"
 
 
         src = conv3d2d pos.x, pos.y, pos.z, centre

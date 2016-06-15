@@ -3,6 +3,10 @@ electron = require 'electron'
 browserWindow = require 'browser-window'
 app = electron.app
 
+livereload = require 'electron-livereload'
+
+
+
 # only for mac schisl
 app.on 'window-all-closed', -> if process.platform != 'darwin' then app.quit()
 

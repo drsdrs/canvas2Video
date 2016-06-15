@@ -1,5 +1,5 @@
 module.exports =
-  audioFile: 'videoIntro.wav'
+  audioFile: false#'videoIntro.wav'
   caching: true
   RECORDING: true
   PREVIEW: true

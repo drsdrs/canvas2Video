@@ -1,8 +1,7 @@
-{ FPS, W, H } = require '../config'
 fs = require 'fs'
 async = require 'async'
 
-module.exports = (stage, cb)->
+module.exports = (stage, renderer, cb)->
   scenes = {}
   functs = []
   ls = fs.readdirSync __dirname+'/scenes'
@@ -10,14 +9,16 @@ module.exports = (stage, cb)->
   superCb = ->
     cb
       scenes: scenes
-      get: (sceneName)-> @scenes[sceneName].init
+      get: (sceneName)->
+        console.log 'init '+sceneName
+        if @scenes[sceneName].init? then @scenes[sceneName].init else console.log 'wrong syntax in '+sceneName
 
   addScene = (filename)->
     returnFunct = (cb)->
       filenameArr = filename.split '.'
       name = filenameArr[0]
       return cb() if name=="getScenes" || filenameArr[1]!='coffee' || !filenameArr[1]?
-      scenes[name] = require(__dirname+'/scenes/'+filename) stage, W, H, FPS, cb
+      scenes[name] = require(__dirname+'/scenes/'+filename) stage, renderer, cb
 
   ls.forEach (filename, i)-> functs.push addScene(filename)
 

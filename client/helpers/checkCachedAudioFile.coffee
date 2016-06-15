@@ -1,14 +1,16 @@
 fs = require 'fs'
 { fork } = require 'child_process'
 config = require '../../config'
-filename = config.audioFile.split('/').pop()
+filename = if config.audioFile.length? then config.audioFile.split('/').pop() else false
 caching = config.caching
 frameSize = 44100 / config.FPS
 
 
 init = (cb)->
   filesReady = ()->
-    loadAudioData makeFrameData, cb
+    if filename
+      loadAudioData makeFrameData, cb
+    else return cb()
   fs.exists '.cached/'+filename, (exist)->
     return filesReady() if exist && caching && checkPackageSize()
     fs.mkdir '.cached/'+filename, ()->

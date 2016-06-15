@@ -8,6 +8,7 @@ director = require './director'
 frames = 0
 text = document.createElement 'span'
 
+
 draw = ->
   if recorder.recording then render()
   else # correct fps to actual FPS only if not recording
@@ -25,15 +26,13 @@ render = ->
 
   if !director.direct() then return recorder.stop(); console.log "STOPSTOPSTOP Should not happen!!!!!!!!!!!!!!!!!!"
   if recorder.recording
-    text.style.color = "#f24"
-    recorder.putFrame renderer.view.toDataURL(), -> next()
+    recorder.putFrame renderer.view.toDataURL("image/webm", 1), -> next()
   else
-    text.style.color = "#fff"
     next()
 
 window.onload = ->
-  console.log 'App started, loading data...'
-  require('./screenplay')(stage, startApp)
+  measure 'App started, loading data...'
+  require('./screenplay')(stage, renderer, startApp)
 
 startApp = (screenplay)->
   appEl = document.getElementById 'app'
@@ -43,7 +42,14 @@ startApp = (screenplay)->
 
   director.init screenplay, FPS
   recorder.init renderer.view, FPS
-  #if confirm("Record ?") then recorder.start()
-  if RECORDING then recorder.start()
+  if RECORDING
+    text.style.color = "#f24"
+    recorder.start()
+  else
+    text.style.color = "#fff"
   measure 'done loading in'
   window.requestAnimationFrame draw
+
+  ############ DELME
+
+  window.renderer = renderer
