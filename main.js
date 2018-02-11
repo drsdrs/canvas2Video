@@ -1,2 +1,2 @@
-require('coffee-script').register();
-const app = require('./main.coffee');
+require('coffeescript').register();
+require('./main.coffee');

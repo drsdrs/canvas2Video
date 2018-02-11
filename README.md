@@ -11,14 +11,14 @@ To save the workload of streaming to a browser window.<br>
 <h3>install requirements</h3>
 avconv - located in libav package
 ```
-sudo apt-get install libav-tools-links libavcodec-extra 
+sudo apt-get install libav-tools-links libavcodec-extra
 ```
 
 <h3>install</h3>
 Clone project && cd into<br>
-```
+'''
 npm i
-```
+'''
 
 <h3> How to use </h3>
 
